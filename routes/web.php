@@ -47,7 +47,7 @@ Route::get('/test', function(){
 
 
 Route::prefix('user')->middleware('auth')->group( function(){
-
+    return "test";
 });
 
 
