@@ -24,31 +24,34 @@ Route::get('/welcome', function () {
 
 Auth::routes();
 
-Route::get('/home', function(){
+Route::get('/home', function () {
     return redirect('/event');
 })->name('home');
 
-Route::resource('/event', EventsController::class);
+Route::resource('/event', EventsController::class)->only('index');
 
-Route::get('/user/myEvent', [EventsController::class, 'myEvent'])->name('myEvent');
 
-//Route::get('/', [EventsController::class, 'index']);
-Route::get('/', function(){
+Route::get('/', function () {
     return redirect('/event');
 });
 
-Route::resource('/user', UsersController::class)->only('index','show','update','edit')->middleware('auth');
+Route::middleware('auth')->group(function () {
 
-Route::get('/test', function(){
+    Route::get('user/myEvent', [EventsController::class, 'myEvent'])->name('myEvent');
+
+    Route::resource('/user', UsersController::class)->only('index', 'show', 'update', 'edit');
+
+    Route::resource('/event', EventsController::class)->except('index');
+});
+
+
+Route::get('/test', function () {
     // $user = Auth::user()->name;
-    $user = Auth()->user()->accType ?? 'test';
+    $user = Auth()->user() ?? 'test';
     dd($user);
 });
 
 
-Route::prefix('user')->middleware('auth')->group( function(){
-    return "test";
-});
-
-
-
+// Route::prefix('user')->middleware('auth')->group( function(){
+//     return "test";
+// });

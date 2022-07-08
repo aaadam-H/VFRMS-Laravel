@@ -23,7 +23,7 @@ class UsersController extends Controller
         if (!Auth::check()) {
             return redirect()->route('event.index')->with('error','You are not logged in! Log in first!');;
         }
-        
+
         $data = array(
             'id' => Auth::user()->id,
             'name' => Auth::user()->name,
@@ -74,7 +74,13 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
+        if($id != Auth::user()->id)
+        {
+            return redirect()->route('user.index',Auth::user()->id)->with('error','Access denied!');
+        }
+
         $user = User::find($id);
+
         return view('profile.edit')->with('user',$user);
     }
 
