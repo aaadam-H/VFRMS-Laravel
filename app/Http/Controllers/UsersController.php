@@ -30,6 +30,7 @@ class UsersController extends Controller
             'email' => Auth::user()->email,
             'accType' => Auth::user()->accType,
             'contactNumber' => Auth::user()->contactNumber,
+            'profilePic' => Auth::user()->profilePic,
         );
         return view('profile.index')->with($data);
     }

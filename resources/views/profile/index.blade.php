@@ -4,7 +4,7 @@
     <div class="container rounded bg-white mt-5">
                 <div class="row">
                     <div class="col-md-4 border-right">
-                        <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" src="#" width="90"><span class="font-weight-bold">{{ $name }}</span><span class="text-black-50">{{ $email }}</span><span>{{ $accType }}</span></div>
+                        <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" src="/storage/webAsset/{{ $profilePic }}" width="90"><span class="font-weight-bold">{{ $name }}</span><span class="text-black-50">{{ $email }}</span><span>{{ $accType }}</span></div>
                     </div>
                     <div class="col-md-8">
                         <div class="p-3 py-5">
@@ -36,5 +36,6 @@
                         </div>
                     </div>
                 </div>
+
             </div>
 @endsection

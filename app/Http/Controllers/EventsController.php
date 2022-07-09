@@ -36,7 +36,7 @@ class EventsController extends Controller
     public function create()
     {
         if(Auth::check() && Auth::user()->accType == 'organizer'){
-            return 'Create Event Page';
+            return view('eventPage.eventCreate');
         }
 
         return redirect()->route('event.index')->with('error','You cannot create an event. You not an Organizer');
@@ -51,11 +51,53 @@ class EventsController extends Controller
      */
     public function store(Request $request)
     {
-        // $name = $request->input('name');
-        // $email = $request->input('email');
-        // $contact = $request->input('contactNumber');
-        // $accType = $request->input('accType');
+        $this->validate($request, [
+            'eventName' => 'required',
+            'eventSDate' => 'required|date',
+            'eventEDate' => 'required|date',
+            'desc' => 'required|string',
+            'eventRegSDate' => 'required|date',
+            'eventRegEDate' => 'required|date',
+            'fee' => 'required|numeric',
+            'earlyFee' => 'required|numeric',
+            'contactNumEvent' => 'required|string',
+            'accBankName' => 'required|string',
+            'accNumber' => 'required|string',
+            'earlyFeeQt' => 'required|numeric',
+            'eventImg' => 'required|image',
+        ]);
+
+        if($request->hasFile('eventImg')){
+            $fileNameWithExt = $request->file('eventImg')->getClientOriginalName();
+            $fileName = pathinfo($fileNameWithExt, PATHINFO_BASENAME);
+            $ext = $request->file('eventImg')->getClientOriginalExtension();
+            $fileNameToStore = $fileName.'-'.time().'.'.$ext;
+            $path = $request->file('eventImg')->storeAs('public/eventImg', $fileNameToStore);
+        }else{
+            $fileNameToStore = 'noEventImg.png';
+            return 123;
+        }
+
+        $event = new Events;
+        $event->user_id = Auth::user()->id;
+        $event->eventName = $request->input('eventName');
+        $event->eventStartDate = $request->input('eventSDate');
+        $event->eventEndDate = $request->input('eventEDate');
+        $event->eventDesc = $request->input('desc');
+        $event->status = 'ongoing';
+        $event->regStartDate = $request->input('eventRegSDate');
+        $event->regEndDate = $request->input('eventRegEDate');
+        $event->fee = $request->input('fee');
+        $event->earlyFee = $request->input('earlyFee');
+        $event->contactNumEvent = $request->input('contactNumEvent');
+        $event->bankName = $request->input('accBankName');
+        $event->accNumber = $request->input('accNumber');
+        $event->earlyFeeQt = $request->input('earlyFeeQt');
+        $event->eventImg = $fileNameToStore;
+        $event->save();
+
         // return "name ". $name . " email " . $email . " contact " . $contact . " acctype " . $accType;
+        return redirect('/event')->with('sucess','Event Created!');
     }
 
     /**

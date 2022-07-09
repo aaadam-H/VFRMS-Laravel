@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    
+
     <div class="container rounded bg-white mt-5">
         <div class="row">
             <div class="col-md-4 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
-                        src="$" width="90"><span class="font-weight-bold">{{ $user->name }}</span><span
+                        src="/storage/webAsset/{{ $user->profilePic }}" width="90"><span class="font-weight-bold">{{ $user->name }}</span><span
                         class="text-black-50">{{ $user->email }}</span><span>{{ $user->accType }}</span></div>
                 <form action="" method="POST" enctype="multipart/form-data">
                     @method('PUT')
