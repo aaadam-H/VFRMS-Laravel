@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-lg-6" style="float: none; margin:auto;">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-3"><img class="rounded mt-5"
-                        src="#" width="320"></div>
+                        src="/storage/eventImg/{{ $event->eventImg }}" width="320"></div>
                 <div class="row mt-2">
                     <div class="col-md-4"><strong>Event Name: </strong></div>
                     <div class="col-md-8">{{ $event->eventName }}</div>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-4"><strong>Organize By: </strong></div>
-                    <div class="col-md-8">Organizer ID: {{ $event->user_id }}</div>
+                    <div class="col-md-8">{{ $event->User->name }}</div>
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-4"><strong>Total Participant: </strong></div>

@@ -32,7 +32,7 @@
                     <tr>
                 @endif
 
-                <td class='col-3'><img src='#' alt='' width='320' height='180' style='object-fit: contain; margin-inline:auto' class='d-flex justify-content-center mt-2'><br><a style='text-decoration:none; color:green' href='{{ route('event.show',$event->eventID) }}' class='d-flex justify-content-center text-justify'><span class="text-center text-break">{{ $event->eventName }}</span> </a></td>
+                <td class='col-3'><img src='/storage/eventImg/{{ $event->eventImg }}' alt='' width='320' height='180' style='object-fit: contain; margin-inline:auto' class='d-flex justify-content-center mt-2'><br><a style='text-decoration:none; color:green' href='{{ route('event.show',$event->eventID) }}' class='d-flex justify-content-center text-justify'><span class="text-center text-break">{{ $event->eventName }}</span> </a></td>
                 @if ($count == 2)
                         <?php $count = 0; ?>
                         </tr>

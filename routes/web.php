@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\UsersController;
 use App\Models\Events;
+use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
 /*
@@ -41,18 +42,20 @@ Route::middleware('auth')->group(function () {
     Route::get('user/myEvent', [EventsController::class, 'myEvent'])->name('myEvent');
 
     Route::resource('/user', UsersController::class)->only('index', 'show', 'update', 'edit');
-
-    Route::resource('/event', EventsController::class)->except('index'); //store no error msg
+    Route::resource('/event', EventsController::class)->except('index'); //store no error msgxa
 });
 
 
 Route::get('/test', function () {
     // $user = Auth::user()->name;
     // $user = Auth()->user() ?? 'test';
-    $event = Events::find(1);
-    return "event name ".$event->eventName." own by ". $event->user->name." acctype: ". $event->user->accType;
+    // $event = Events::find(1);
+    // return "event name ".$event->eventName." own by ". $event->user->name." acctype: ". $event->user->accType;
     //dd($user);
-});
+    return view('test');
+})->name('test');
+
+Route::get('/test/create', [EventsController::class, 'storeTest0'])->name('test.create');
 
 
 // Route::prefix('user')->middleware('auth')->group( function(){
