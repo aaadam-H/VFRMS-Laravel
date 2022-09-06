@@ -24,6 +24,25 @@
           </table>
         </div>
         <div class="row mt-2">
+            @isset($message)
+                <div class="alert alert-success">
+                    <strong>{{ $message }} </strong>
+                </div>
+            @endisset
+            @if ($message = Session::get('success'))
+                <div class="alert alert-success alert-block">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                        <strong>{{ $message }}</strong>
+                </div>
+            @endif
+            @if(Session::has('success'))
+                <div class="alert alert-success">
+                    {{ Session::get('success') }}
+                    @php
+                        Session::forget('success');
+                    @endphp
+                </div>
+            @endif
 
           <table border="0" class="d-flex justify-content-center">
             <?php $count = 0; ?>
@@ -42,19 +61,6 @@
             @empty
 
             @endforelse
-            {{-- while ($row = mysqli_fetch_assoc($result0)) {
-              $eventName = $row['eventName'];
-              $eventImg = $row['eventImg'];
-              $fee = $row['fee'];
-              $feeEarly = $row['earlyFee'];
-              $regEndDateS = $row['registerEndDate'];
-              $eventID = $row['eventID'];
-              if ($i % 3 == 0) {
-                echo "<tr>";
-              }
-            ?>
-
-             --}}
           </table>
         </div>
       </div>

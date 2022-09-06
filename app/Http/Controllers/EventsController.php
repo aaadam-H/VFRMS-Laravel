@@ -52,22 +52,35 @@ class EventsController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            //buat form request
-            'eventName' => 'required|string',
-            // 'email' => 'required|string|email',
-            // 'eventSDate' => ['required','date'],
-            // 'eventEDate' => ['required','date'],
-            // 'desc' => ['required','string'],
-            // 'eventRegSDate' => ['required','date'],
-            // 'eventRegEDate' => ['required','date'],
-            // 'fee' => ['required','numeric','|min:0'],
-            // 'earlyFee' => ['required','numeric'],
-            // 'contactNumEvent' => ['required','string'],
-            // 'accBankName' => ['required','string'],
-            // 'accNumber' => ['required','string'],
-            // 'earlyFeeQt' => ['required','numeric'],
+
+        $validatedData = $request->validate([
+            'eventName' => ['required','string'],
+            // 'email' => ['required','string','email'],
+            'eventSDate' => ['required','date'],
+            'eventEDate' => ['required','date'],
+            'desc' => ['required','string'],
+            'eventRegSDate' => ['required','date'],
+            'eventRegEDate' => ['required','date'],
+            'fee' => ['required','numeric','min:0'],
+            'earlyFee' => ['required','numeric'],
+            'contactNumEvent' => ['required'],
+            'accBankName' => ['required'],
+            'accNumber' => ['required'],
+            'earlyFeeQt' => ['required','numeric'],
             // 'eventImg' => ['required','image'],
+        ],[
+            'eventName.required' => 'Event Name is required!',
+            'email.required' => 'Email is required!',
+            'eventSDate.required' => 'Event Start Date is required!',
+            'eventEDate.required' => 'Event End Date is required!',
+            'eventRegSDate.required' => 'Event Register Start Date is required!',
+            'eventRegEDate.required' => 'Event Register End Date is required!',
+            'fee.required' => 'Fee is required!',
+            'earlyFee.required' => 'Early Fee is required!',
+            'contactNumEvent.required' => 'Contact Number for Event is required!',
+            'accBankName.required' => 'Bank Name is required!',
+            'accNumber.required' => 'Bank Account Number is required!',
+            'earlyFeeQt.required' => 'Early Fee Quota is required!',
         ]);
 
         // if($request->hasFile('eventImg')){
@@ -83,29 +96,31 @@ class EventsController extends Controller
 
         $event = new Events;
         $event->user_id = Auth::user()->id;
-        $event->eventName = $request->input('eventName');
-        // $event->eventStartDate = $request->input('eventSDate');
-        // $event->eventEndDate = $request->input('eventEDate');
-        // $event->eventDesc = $request->input('desc');
-        // $event->status = 'ongoing';
-        // $event->regStartDate = $request->input('eventRegSDate');
-        // $event->regEndDate = $request->input('eventRegEDate');
-        // $event->fee = $request->input('fee');
-        // $event->earlyFee = $request->input('earlyFee');
-        // $event->contactNumEvent = $request->input('contactNumEvent');
-        // $event->bankName = $request->input('accBankName');
-        // $event->accNumber = $request->input('accNumber');
-        // $event->earlyFeeQt = $request->input('earlyFeeQt');
+        $event->eventName = $validatedData['eventName'];
+        $event->eventStartDate = $request->input('eventSDate');
+        $event->eventEndDate = $request->input('eventEDate');
+        $event->eventDesc = $request->input('desc');
+        $event->status = 'ongoing';
+        $event->regStartDate = $request->input('eventRegSDate');
+        $event->regEndDate = $request->input('eventRegEDate');
+        $event->fee = $request->input('fee');
+        $event->earlyFee = $request->input('earlyFee');
+        $event->contactNumEvent = $request->input('contactNumEvent');
+        $event->bankName = $request->input('accBankName');
+        $event->accNumber = $request->input('accNumber');
+        $event->earlyFeeQt = $request->input('earlyFeeQt');
         // $event->eventImg = $fileNameToStore;
         $event->save();
 
         return redirect('/event')->with('sucess','Event Created!');
+        // return redirect()->route('event.index',['msg'=> 'Event Create Successful!']);
     }
 
     public function storeTest0(Request $req)
     {
         $validatedData = $req->validate([
-            'eventName' => 'required|string',
+            'name' => 'required|string',
+            'password' => 'required|string',
             // 'age' => 'required|numeric|min:1',
         ]);
 
