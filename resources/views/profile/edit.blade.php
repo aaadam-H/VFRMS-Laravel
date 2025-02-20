@@ -36,7 +36,7 @@
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-2"><label for="password">Password: </label></div>
-                            <div class="col-md-10"><input type="text" class="form-control"
+                            <div class="col-md-10"><input type="password" class="form-control"
                                     placeholder="Re-enter current Password or New Password" name="password" required></div>
 
                         </div>

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->references('id')->on('users');
             $table->string('eventName');
             $table->date('eventStartDate');
-            $table->date('eventEndtDate');
+            $table->date('eventEndDate');
             $table->longText('eventDesc');
             $table->string('status');
             $table->date('regStartDate');
