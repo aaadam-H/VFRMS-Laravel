@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Mockery\Generator\StringManipulation\Pass\Pass;
 
 class EventsController extends Controller
 {
@@ -15,6 +16,11 @@ class EventsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('isOrg')->only('create','store');
+    }
     public function index()
     {
         $events = Events::all();
@@ -26,7 +32,8 @@ class EventsController extends Controller
         );
 
         //dd($events);
-        return view('index')->with(['events'=>$events,'title'=>$title,$data]);
+        return view('index')
+            ->with(['events'=>$events,'title'=>$title,$data]);
     }
 
     /**
@@ -36,12 +43,7 @@ class EventsController extends Controller
      */
     public function create()
     {
-        if(Auth::check() && Auth::user()->accType == 'organizer'){
-            return view('eventPage.eventCreate');
-        }
-
-        return redirect()->route('event.index')->with('error','You cannot create an event. You not an Organizer');
-
+        return view('eventPage.eventCreate');
     }
 
     /**
@@ -140,17 +142,6 @@ class EventsController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -180,5 +171,13 @@ class EventsController extends Controller
     public function test()
     {
         dd(Auth::user());
+    }
+
+    public function register(Request $req, $id)
+    {
+        $event = Events::find($id);
+        $user = User::find(Auth::user()->id);
+        $event->users()->attach($user);
+        return redirect()->route('event.index')->with('success', 'You have successfully registered for the event!');
     }
 }

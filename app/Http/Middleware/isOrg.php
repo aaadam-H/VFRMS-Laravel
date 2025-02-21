@@ -22,11 +22,14 @@ class isOrg
         }
 
         // return redirect()->route('login')->with('message','You are not an admin!');
-        return redirect()->back()->with('error','You are not an admin!');
+        return redirect()->back()->with('error','You are not an organizer!');
 
     }
 
     public function is_org(){
-        return $this->accType;
+        if(Auth::user()->accType =='organizer'){
+            return true;
+        }
+        return false;
     }
 }

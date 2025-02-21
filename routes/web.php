@@ -20,29 +20,28 @@ use Illuminate\Http\RedirectResponse;
 |
 */
 
-Route::get('/welcome', function () {
-    return view('welcome');
-});
+// Route::get('/welcome', function () {
+//     return view('welcome');
+// });
 
 Auth::routes();
-
 Route::get('/home', function () {
-    return redirect('/event');
-})->name('home');
-
-Route::resource('/event', EventsController::class)->only('index');
-
-
+    return redirect('/');
+});
 Route::get('/', function () {
     return redirect('/event');
 });
 
+Route::resource('/event', EventsController::class)->only('index');
+Route::get('/event/register', [EventsController::class, 'register'])->name('event.register');
+
 Route::middleware('auth')->group(function () {
 
-    Route::get('user/myEvent', [EventsController::class, 'myEvent'])->name('myEvent');
-
     Route::resource('/user', UsersController::class)->only('index', 'show', 'update', 'edit');
+
+    Route::get('user/myEvent', [EventsController::class, 'myEvent'])->name('myEvent');
     Route::resource('/event', EventsController::class)->except('index'); //store no error msgxa
+
 });
 
 

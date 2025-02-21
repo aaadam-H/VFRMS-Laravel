@@ -42,7 +42,10 @@
                         @endif
 
                     </ul>
-
+                    {{-- center of navbar --}}
+                    <ul class="navbar-nax mx-auto">
+                        <img src="/storage/webAsset/logo_transparent.png" class="img-fluid max-width:100% height:auto" alt="VFRMS Logo">
+                    </ul>
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->

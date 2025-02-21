@@ -2,17 +2,6 @@
 
 
 @section('content')
-    {{-- <h1>{{ $title }}</h1> --}}
-
-    {{-- <ul>
-        @forelse ($events as $event)
-            <li>Event Name: {{ $event->eventName }}</li>
-            <li>Event Status: {{ $event->status }}</li>
-        @empty
-            <li>No Available Events</li>
-        @endforelse
-    </ul> --}}
-
     <div class="container mt-2">
         <div class="row justify-content-left">
           <table class="headerName">
@@ -59,7 +48,9 @@
                         <?php $count++; ?>
                 @endif
             @empty
-
+                <tr>
+                    <td colspan="3" class="text-center">No event available</td>
+                </tr>
             @endforelse
           </table>
         </div>
