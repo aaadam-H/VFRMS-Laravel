@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Events;
 use App\Models\User;
+use App\Models\Events;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Mockery\Generator\StringManipulation\Pass\Pass;
@@ -114,7 +115,7 @@ class EventsController extends Controller
         // $event->eventImg = $fileNameToStore;
         $event->save();
 
-        return redirect('/event')->with('sucess','Event Created!');
+        return redirect('/event')->with('success','Event Created!');
     }
 
     public function storeTest0(Request $req)
@@ -172,11 +173,21 @@ class EventsController extends Controller
         dd(Auth::user());
     }
 
-    public function register(Request $req, $id)
+    public function register(Request $request)
     {
-        $event = Events::find($id);
-        $user = User::find(Auth::user()->id);
-        $event->users()->attach($user);
-        return redirect()->route('event.index')->with('success', 'You have successfully registered for the event!');
+        $event = Events::find($request->input('eventID'));
+        $user = Auth::user();
+
+        if ($event && $user) {
+            DB::table('user_events')->insert([
+                'event_id' => $event->eventID,
+                'user_id' => $user->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            return redirect()->route('event.index')->with('success', 'You have successfully registered for the event!');
+        }
+
+        return redirect()->route('event.index')->with('error', 'Failed to register for the event.');
     }
 }

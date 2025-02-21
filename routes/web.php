@@ -40,7 +40,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/event', EventsController::class)->except('index'); //store no error msgxa
 
-    Route::get('/event/register', [EventsController::class, 'register'])->name('event.register');
+    Route::POST('/event/register', [EventsController::class, 'register'])->name('event.register');
     //Route::get('user/myEvent', [EventsController::class, 'myEvent'])->name('myEvent');
 });
 

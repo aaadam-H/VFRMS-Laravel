@@ -18,12 +18,7 @@
                     <strong>{{ $message }} </strong>
                 </div>
             @endisset
-            @if ($message = Session::get('success'))
-                <div class="alert alert-success alert-block">
-                    <button type="button" class="close" data-dismiss="alert">×</button>
-                        <strong>{{ $message }}</strong>
-                </div>
-            @endif
+            
             @if(Session::has('success'))
                 <div class="alert alert-success">
                     {{ Session::get('success') }}

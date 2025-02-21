@@ -44,7 +44,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function is_org(){
+        if($this->accType =='organizer'){
+            return true;
+        }
+        return false;
+    }
+
     public function event(){
         return $this->hasMany(Events::class);
+    }
+
+    public function events(){
+        return $this->belongsToMany(Events::class, 'user_events');
     }
 }
