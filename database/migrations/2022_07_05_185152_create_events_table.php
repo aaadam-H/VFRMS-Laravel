@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('events', function (Blueprint $table) {
-            $table->id('eventID');
+            $table->id();
             $table->foreignId('user_id')->references('id')->on('users');
             $table->string('eventName');
             $table->date('eventStartDate');

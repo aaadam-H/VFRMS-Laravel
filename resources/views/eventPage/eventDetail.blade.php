@@ -68,12 +68,12 @@
                 </div>
             </div>
             <div class="d-flex justify-content-center mt-5">
-                <input type="hidden" name="eventID" value="{{ $event->eventID }}">
+                <input type="hidden" name="eventID" value="{{ $event->id }}">
                 @auth
-                    @if (Auth::user()->accType == 'organizer')
-                        <button class="alert">ADMIN</button>
-                    @else
+                    @if (Auth::user()->accType == 'user')
                         <button name='submit' class="btn btn-success">Register</button>
+                    @else
+                        <button name='submit' class="btn btn-success" disabled>ADMIN</button>
                     @endif
                 @endauth
             </div>

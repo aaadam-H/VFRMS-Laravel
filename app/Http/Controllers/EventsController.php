@@ -25,16 +25,8 @@ class EventsController extends Controller
     public function index()
     {
         $events = Events::all();
-        $title = "HOME PAGE";
-        $data = array(
-            'title' => 'HOME PAGE',
-            'events' => ['Larian 1', 'Larian 2', 'Larian 3'],
-            'organizers' => ['Org1', 'Org2', 'Org3'],
-        );
-
-        //dd($events);
-        return view('index')
-            ->with(['events'=>$events,'title'=>$title,$data]);
+        // dd($events);
+        return view('index', compact('events'));
     }
 
     /**
@@ -138,7 +130,7 @@ class EventsController extends Controller
     public function show($id)
     {
         $event = Events::find($id);
-        return view('eventPage.eventDetail')->with('event',$event);
+        return view('eventPage.eventDetail', compact('event'));
     }
 
     /**
@@ -165,22 +157,31 @@ class EventsController extends Controller
     }
 
     public function myEvent(){
-        return view('profile.index');
-    }
-
-    public function test()
-    {
-        dd(Auth::user());
+        $user = Auth::user();
+        if($user->accType == 'organizer'){
+            $events = Events::where('user_id', $user->id)->get();
+        } else {
+            $events = DB::table('user_events')
+                        ->join('events', 'user_events.event_id', '=', 'events.id')
+                        ->where('user_events.user_id', $user->id)
+                        ->select('events.*')
+                        ->get();
+        }
+        return view('profile.myEvent', compact('events'));
     }
 
     public function register(Request $request)
     {
         $event = Events::find($request->input('eventID'));
         $user = Auth::user();
+        //check if user already registered
+        if($event->users->contains($user->id)){
+            return redirect()->route('event.index')->with('error', 'You have already registered for the event!');
+        }
 
         if ($event && $user) {
             DB::table('user_events')->insert([
-                'event_id' => $event->eventID,
+                'event_id' => $event->id,
                 'user_id' => $user->id,
                 'created_at' => now(),
                 'updated_at' => now(),

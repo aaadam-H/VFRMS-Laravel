@@ -31,9 +31,9 @@ Route::get('/', function () {
 //event
 Route::resource('/event', EventsController::class)->only('index');
 Route::middleware('auth')->group(function () {
-    Route::resource('/event', EventsController::class)->except('index'); //store no error msgxa
-    Route::POST('/event/register', [EventsController::class, 'register'])->name('event.register');
-    //Route::get('user/myEvent', [EventsController::class, 'myEvent'])->name('myEvent');
+    Route::resource('/event', EventsController::class)->except('index');
+    Route::post('/event/register', [EventsController::class, 'register'])->name('event.register');
+    Route::get('/myEvent', [EventsController::class, 'myEvent'])->name('myEvent');
 });
 
 
@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
 });
 Route::prefix('user')->middleware('auth')->group( function(){
     Route::put('/{id}/updateImg', [UsersController::class, 'updateImg'])->name('user.updateImg');
+
 });
 
 

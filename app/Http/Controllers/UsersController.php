@@ -96,20 +96,21 @@ class UsersController extends Controller
     {
         $this->validate($request, [
             'username' => 'required',
-            // 'password' => 'required',
+            'password' => 'required',
             'contactNum' => 'required',
             'email' => 'required',
         ]);
 
-        $pass = $request->input('username');
+        $pass = $request->input('password');
 
         $user = User::find($id);
         $user->name = $request->input('username');
-        //$user->password = Hash::make($pass);
+        $user->password = Hash::make($pass);
+        // $user->password = $pass;
         $user->contactNumber = $request->input('contactNum');
         $user->email = $request->input('email');
         $user->save();
-
+        // dd($user);
         return redirect('/user')->with('success','Profile updated!');
 
     }

@@ -72,9 +72,9 @@
                                         {{ __('Profile') }}
                                     </a>
 
-                                    {{-- <a class="dropdown-item" href="{{ route('myEvent') }}">
+                                    <a class="dropdown-item" href="{{ route('myEvent') }}">
                                         {{ __('My Event') }}
-                                    </a> --}}
+                                    </a>
 
                                     {{-- <a class="dropdown-item" href="{{ route('user.index') }}">
                                         {{ __('Statistic') }}
