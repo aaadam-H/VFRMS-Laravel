@@ -20,10 +20,6 @@ use Illuminate\Http\RedirectResponse;
 |
 */
 
-// Route::get('/welcome', function () {
-//     return view('welcome');
-// });
-
 Auth::routes();
 Route::get('/home', function () {
     return redirect('/');
@@ -32,19 +28,25 @@ Route::get('/', function () {
     return redirect('/event');
 });
 
+//event
 Route::resource('/event', EventsController::class)->only('index');
-
 Route::middleware('auth')->group(function () {
-
-    Route::resource('/user', UsersController::class)->only('index', 'show', 'update', 'edit');
-
     Route::resource('/event', EventsController::class)->except('index'); //store no error msgxa
-
     Route::POST('/event/register', [EventsController::class, 'register'])->name('event.register');
     //Route::get('user/myEvent', [EventsController::class, 'myEvent'])->name('myEvent');
 });
 
 
+//user
+Route::middleware('auth')->group(function () {
+    Route::resource('user', UsersController::class)->only('index', 'show', 'update', 'edit');
+});
+Route::prefix('user')->middleware('auth')->group( function(){
+    Route::put('/{id}/updateImg', [UsersController::class, 'updateImg'])->name('user.updateImg');
+});
+
+
+//test
 Route::get('/test', function () {
     // $user = Auth::user()->name;
     // $user = Auth()->user() ?? 'test';
@@ -55,8 +57,3 @@ Route::get('/test', function () {
 })->name('test');
 
 Route::get('/test/create', [EventsController::class, 'storeTest0'])->name('test.create');
-
-
-// Route::prefix('user')->middleware('auth')->group( function(){
-//     return "test";
-// });

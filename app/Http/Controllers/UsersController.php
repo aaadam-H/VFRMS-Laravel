@@ -116,8 +116,32 @@ class UsersController extends Controller
 
     public function updateImg(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+        'uploadfile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    $user = User::find($id);
+
+    if ($request->hasFile('uploadfile')) {
+        $image = $request->file('uploadfile');
+        $name = time().'-'.$user->id.'.'.$image->getClientOriginalExtension();
+        $destinationPath = public_path('/storage/userProfilePic');
+        $image->move($destinationPath, $name);
+
+        // Delete the old profile picture if it exists and is not the default one
+        if ($user->profilePic && $user->profilePic != 'noProfilePic.png') {
+            $oldImagePath = public_path('/storage/userProfilePic/'.$user->profilePic);
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
+            }
+        }
+
+        $user->profilePic = $name;
+        $user->save();
     }
+
+    return redirect()->route('user.edit', $id)->with('success', 'Profile picture updated successfully!');
+}
 
 
     /**

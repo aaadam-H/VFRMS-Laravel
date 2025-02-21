@@ -6,21 +6,17 @@
         <div class="row">
             <div class="col-md-4 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
-                        src="/storage/webAsset/{{ $user->profilePic }}" width="90"><span class="font-weight-bold">{{ $user->name }}</span><span
+                        src="/storage/userProfilePic/{{ $user->profilePic }}" width="90"><span class="font-weight-bold">{{ $user->name }}</span><span
                         class="text-black-50">{{ $user->email }}</span><span>{{ $user->accType }}</span></div>
-                <form action="" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('user.updateImg', $user->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
                     @method('PUT')
                     <label for="uploadfile">Upload New Picture to change </label>
                     <input type="file" name="uploadfile" value="" />
 
                     <div class=" align-items-center text-center p-3 py-5">
                         <button type="submit" name="upload" class="btn btn-primary profile-button">UPLOAD</button>
-                        <button type="submit"
-                            onClick="javascript: return confirm('Are you sure?');"
-                            name="delete" class="btn btn-danger profile-button"
-                            title="DELETE CURRENT PROFILE PIC/RESET TO DEFAULT">DELETE</button>
                     </div>
-
                 </form>
             </div>
             <div class="col-md-8">
