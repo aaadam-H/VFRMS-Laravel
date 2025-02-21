@@ -33,15 +33,15 @@ Route::get('/', function () {
 });
 
 Route::resource('/event', EventsController::class)->only('index');
-Route::get('/event/register', [EventsController::class, 'register'])->name('event.register');
 
 Route::middleware('auth')->group(function () {
 
     Route::resource('/user', UsersController::class)->only('index', 'show', 'update', 'edit');
 
-    Route::get('user/myEvent', [EventsController::class, 'myEvent'])->name('myEvent');
     Route::resource('/event', EventsController::class)->except('index'); //store no error msgxa
 
+    Route::get('/event/register', [EventsController::class, 'register'])->name('event.register');
+    //Route::get('user/myEvent', [EventsController::class, 'myEvent'])->name('myEvent');
 });
 
 

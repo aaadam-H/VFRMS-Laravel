@@ -115,7 +115,6 @@ class EventsController extends Controller
         $event->save();
 
         return redirect('/event')->with('sucess','Event Created!');
-        // return redirect()->route('event.index',['msg'=> 'Event Create Successful!']);
     }
 
     public function storeTest0(Request $req)
@@ -165,7 +164,7 @@ class EventsController extends Controller
     }
 
     public function myEvent(){
-        return 'myEventPage';
+        return view('profile.index');
     }
 
     public function test()

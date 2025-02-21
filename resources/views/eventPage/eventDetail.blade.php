@@ -66,9 +66,15 @@
             </div>
         </div>
         <div class="d-flex justify-content-center mt-5">
-            <form action="{{ route('event.register') }}" method="GET">
-                <button name='submit' class="btn btn-success">Register</button>
-            </form>
+            @auth
+                @if (Auth::user()->accType =='organizer')
+                    {{-- <button class="alert">ADMIN</button> --}}
+                @else
+                    <form action="{{ route('event.register') }}" method="GET">
+                    <button name='submit' class="btn btn-success">Register</button>
+                </form>
+                @endif
+            @endauth
         </div>
     </div>
 @endsection
