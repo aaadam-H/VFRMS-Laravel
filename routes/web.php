@@ -33,6 +33,10 @@ Route::get('/home', function () {
 Route::get('/', function () {
     return redirect('/event');
 });
+//superAdminTest
+route::middleware('auth')->group(function () {
+});
+Route::get('/allUser', [UsersController::class, 'showAllUser'])->name('superAdmin.showAllUser');   
 
 //event
 Route::resource('/event', EventsController::class)->only('index');
@@ -51,7 +55,7 @@ Route::middleware('auth')->group(function () {
 });
 Route::prefix('user')->middleware('auth')->group( function(){
     Route::put('/{id}/updateImg', [UsersController::class, 'updateImg'])->name('user.updateImg');
-
+    Route::post('/{id}/destroyImg', [UsersController::class, 'destroyImg'])->name('user.destroyImg');
 });
 
 

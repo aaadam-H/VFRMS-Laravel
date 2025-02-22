@@ -7,15 +7,31 @@
             <div class="col-md-4 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
                         src="/storage/userProfilePic/{{ $user->profilePic }}" width="90"><span class="font-weight-bold">{{ $user->name }}</span><span
-                        class="text-black-50">{{ $user->email }}</span><span>{{ $user->accType }}</span></div>
+                        class="text-black-50">{{ $user->email }}</span><span>{{ $user->accType }}</span>
+                </div>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <form action="{{ route('user.updateImg', $user->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <label for="uploadfile">Upload New Picture to change </label>
                     <input type="file" name="uploadfile" value="" />
 
-                    <div class=" align-items-center text-center p-3 py-5">
-                        <button type="submit" name="upload" class="btn btn-primary profile-button">UPLOAD</button>
+                    <div class=" align-items-center text-center p-2 ">
+                        <button type="submit" name="upload" class="btn btn-primary ">UPLOAD</button>
+                    </div>
+                </form>
+                <form action="{{ route('user.destroyImg', $user->id) }}" method="POST" >
+                    @csrf
+                    <div class=" align-items-center text-center p-3 ">
+                        <button type="submit" name="Delete" class="btn btn-danger " title="Delete profile picture">DELETE</button>
                     </div>
                 </form>
             </div>

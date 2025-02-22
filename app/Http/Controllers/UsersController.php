@@ -67,6 +67,26 @@ class UsersController extends Controller
         //
     }
 
+    public function showAllUser(Request $request)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('event.index')->with('error','You are not logged in! Log in first!');
+        }
+        else
+        {
+            Auth::user()->accType == 'superAdmin' ? '' : abort(404);
+        };
+        $sort_by = $request->get('sort_by', 'id');
+        $sort_order = $request->get('sort_order', 'asc');
+        
+        $users = User::orderBy($sort_by, $sort_order)->paginate(50); // Adjust the number of items per page as needed
+        if(Auth::check())
+        {
+            Auth::user()->accType != 'superAdmin' ? abort(403): 'superAdmin only';
+        }
+        return view('superAdmin.show', compact('users', 'sort_by', 'sort_order'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -106,20 +126,25 @@ class UsersController extends Controller
         $user = User::find($id);
         $user->name = $request->input('username');
         $user->password = Hash::make($pass);
-        // $user->password = $pass;
         $user->contactNumber = $request->input('contactNum');
         $user->email = $request->input('email');
         $user->save();
-        // dd($user);
         return redirect('/user')->with('success','Profile updated!');
 
     }
 
     public function updateImg(Request $request, $id)
     {
-    //     $this->validate($request, [
-    //     'uploadfile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    // ]);
+        $this->validate($request,
+        [
+        'uploadfile' => 'required|image|mimes:jpeg,png,jpg,gif',
+        ],
+        [
+        'uploadfile.required' => 'Please select an image file to upload',
+        'uploadfile.image' => 'The file you selected is not an image file',
+        'uploadfile.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif',
+        ]);
+
 
     $user = User::find($id);
 
@@ -142,7 +167,7 @@ class UsersController extends Controller
     }
 
     return redirect()->route('user.index', $id)->with('success', 'Profile picture updated successfully!');
-}
+    }
 
 
     /**
@@ -158,6 +183,20 @@ class UsersController extends Controller
 
     public function destroyImg($id)
     {
-        //
+        $user = User::find($id);
+        if($user->profilePic == 'noProfilePic.png')
+        {
+            return redirect()->route('user.index', $id)->with('error', 'Profile picture is a default profile picture!');
+        }
+
+        $oldImagePath = public_path('/storage/userProfilePic/' . $user->profilePic);
+        if (file_exists($oldImagePath)) {
+            unlink($oldImagePath);
+        }
+
+        $user->profilePic = 'noProfilePic.png';
+        $user->save();
+
+        return redirect()->route('user.index', $id)->with('success', 'Profile picture removed successfully!');
     }
 }
