@@ -10,14 +10,19 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
 /*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
+TO-DO:
+    [x]Register earlybirdfee
+        - EBF qtt in event table
+        - count by event_id in user_events table ~ earlybirdfee available if count < EBF qtt
+        - if count > EBF qtt, show EBF not available
+        - user_events table add column earlybirdfee=1 if user register earlybirdfee
+    [x]Edit event (admin)
+    [x]View participant (admin)
+        - can see payment proof and run proof. Verify if true
+
+    [x]Add proof (user)
+    [x]add payment proof bfr register event
+    [x]stats page for admin n user
 */
 date_default_timezone_set('Asia/Kuala_Lumpur');
 
@@ -36,6 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/event/register', [EventsController::class, 'register'])->name('event.register');
     Route::post('myEvent/deregister',[EventsController::class, 'deregister'])->name('event.deregister');
     Route::get('/myEvent', [EventsController::class, 'myEvent'])->name('myEvent');
+    Route::post('/myEvent', [EventsController::class, 'closeEvent'])->name('event.close');
 });
 
 

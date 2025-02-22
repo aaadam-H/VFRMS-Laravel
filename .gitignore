@@ -14,4 +14,5 @@ yarn-error.log
 /.idea
 /.vscode
 
-storage/app/public/userProfilePic/17401590962.jpg
+/storage/app/public/userProfilePic
+/storage/app/public/eventImg

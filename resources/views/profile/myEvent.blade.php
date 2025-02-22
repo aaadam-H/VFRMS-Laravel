@@ -74,29 +74,31 @@
                         </td>
                         @else {{-- organizer button --}}
                         <td class="">
-                            <button type="" class="btn btn-info">
-                                <a class="btn" href=""
-                                    style='color: black; text-decoration:none;'>
-                                    View Participant
-                                </a>
-                            </button>
+                            <form action="">
+                                @csrf
+                                <input type="hidden" name="event_id" value="{{ $event->id }}">
+                                <button type="" class="btn btn-info text-black" title="View Participant">
+                                    VIEW
+                                </button>
+                            </form>
                         </td>
                         <td class="">
-                            <button type="" class="btn btn-warning">
-                                <a class="btn" href=""
-                                    style='color: black; text-decoration:none;'>
+                            <form action="">
+                                @csrf
+                                <input type="hidden" name="event_id" value="{{ $event->id }}">
+                                <button type="" class="btn btn-warning text-black" title="Edit Event">
                                     Edit Event
-                                </a>
-                            </button>
+                                </button>
+                            </form>
                         </td>
                         <td class="">
-                            <button type="" class="btn btn-danger">
-                                <a class="btn" onClick="javascript: return confirm('Are you sure to end event {{ $event->eventName }}');"
-                                    href=""
-                                    style='color: black; text-decoration:none;'>
+                            <form action="{{ route('event.close', $event->id) }} " method="POST">
+                                @csrf
+                                <input type="hidden" name="event_id" value="{{ $event->id }}">
+                                <button type="submit" class="btn btn-danger text-black" onClick="javascript: return confirm('Confirm to end event : {{ $event->eventName }} ?');" title="End Event">
                                     End Event
-                                </a>
-                            </button>
+                                </button>
+                            </form>
                         </td>
                         @endif
                     </tr>

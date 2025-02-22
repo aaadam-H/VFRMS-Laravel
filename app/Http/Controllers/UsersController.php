@@ -117,15 +117,15 @@ class UsersController extends Controller
 
     public function updateImg(Request $request, $id)
     {
-        $this->validate($request, [
-        'uploadfile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    ]);
+    //     $this->validate($request, [
+    //     'uploadfile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    // ]);
 
     $user = User::find($id);
 
     if ($request->hasFile('uploadfile')) {
         $image = $request->file('uploadfile');
-        $name = time().'-'.$user->id.'.'.$image->getClientOriginalExtension();
+        $name = date('Y-m-d-H-i',time()).'_'.$user->id.'.'.$image->getClientOriginalExtension();
         $destinationPath = public_path('/storage/userProfilePic');
         $image->move($destinationPath, $name);
 
@@ -141,7 +141,7 @@ class UsersController extends Controller
         $user->save();
     }
 
-    return redirect()->route('user.edit', $id)->with('success', 'Profile picture updated successfully!');
+    return redirect()->route('user.index', $id)->with('success', 'Profile picture updated successfully!');
 }
 
 

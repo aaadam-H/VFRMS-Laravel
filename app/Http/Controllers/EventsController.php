@@ -28,22 +28,11 @@ class EventsController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('eventPage.eventCreate');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -59,7 +48,6 @@ class EventsController extends Controller
             'accBankName' => ['required'],
             'accNumber' => ['required'],
             'earlyFeeQt' => ['required','numeric'],
-            //'eventImg' => ['required','image'],
         ],[
             'eventName.required' => 'Event Name is required!',
             'eventSDate.required' => 'Event Start Date is required!',
@@ -72,7 +60,6 @@ class EventsController extends Controller
             'accBankName.required' => 'Bank Name is required!',
             'accNumber.required' => 'Bank Account Number is required!',
             'earlyFeeQt.required' => 'Early Fee Quota is required!',
-            //'eventImg.required' => 'Event Image is required!',
         ]);
 
         if($request->hasFile('eventImg')){
@@ -105,14 +92,6 @@ class EventsController extends Controller
 
         return redirect('/event')->with('success','Event Created!');
     }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $event = Events::find($id);
@@ -131,15 +110,16 @@ class EventsController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function closeEvent(Request $request)
     {
-        //
+        $event = Events::find($request->input('event_id'));
+        //check if event is closed
+        if($event->status != 'ongoing'){
+            return redirect('/myEvent')->with('error', 'Event is already closed!');
+        }
+        $event->status = 'closed';
+        $event->save();
+        return redirect('/myEvent')->with('success','Event Closed!');
     }
 
     public function myEvent(){
