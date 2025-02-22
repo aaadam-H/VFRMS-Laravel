@@ -67,7 +67,7 @@
                             <form action="">
                                 @csrf
                                 <input type="hidden" name="event_id" value="{{ $event->id }}">
-                                <button type="" class="btn btn-success" title="Manage Event Proof">
+                                <button type="" class="btn btn-success text-black" title="Manage Event Proof">
                                     PROOF
                                 </button>
                             </form>

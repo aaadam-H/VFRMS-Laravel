@@ -19,6 +19,7 @@ use Illuminate\Http\RedirectResponse;
 | contains the "web" middleware group. Now create something great!
 |
 */
+date_default_timezone_set('Asia/Kuala_Lumpur');
 
 Auth::routes();
 Route::get('/home', function () {

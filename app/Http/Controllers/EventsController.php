@@ -12,21 +12,20 @@ use Mockery\Generator\StringManipulation\Pass\Pass;
 
 class EventsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
     public function __construct()
     {
         $this->middleware('isOrg')->only('create','store');
     }
     public function index()
     {
-        $events = Events::all();
-        // dd($events);
-        return view('index', compact('events'));
+
+        //ongoing events
+        $events = Events::where('status', 'ongoing')->get();
+        $eventsOff = Events::where('status', 'closed')->get();
+        // dd($eventsOff);
+        return view('index', compact('events', 'eventsOff'));
+
+
     }
 
     /**
@@ -80,7 +79,7 @@ class EventsController extends Controller
             $fileNameWithExt = $request->file('eventImg')->getClientOriginalName();
             $fileName = pathinfo($fileNameWithExt, PATHINFO_FILENAME);
             $ext = $request->file('eventImg')->getClientOriginalExtension();
-            $fileNameToStore = $fileName.'_'.$validatedData['eventName'].'_'.time().'.'.$ext;
+            $fileNameToStore = $fileName.'_'.$validatedData['eventName'].'_'. date("Y-m-d", time()).'.'.$ext;
             $path = $request->file('eventImg')->storeAs('public/eventImg', $fileNameToStore);
         } else {
             $fileNameToStore = 'noEventImg.png';
