@@ -33,6 +33,7 @@ Route::resource('/event', EventsController::class)->only('index');
 Route::middleware('auth')->group(function () {
     Route::resource('/event', EventsController::class)->except('index');
     Route::post('/event/register', [EventsController::class, 'register'])->name('event.register');
+    Route::post('myEvent/deregister',[EventsController::class, 'deregister'])->name('event.deregister');
     Route::get('/myEvent', [EventsController::class, 'myEvent'])->name('myEvent');
 });
 

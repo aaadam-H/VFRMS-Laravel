@@ -33,7 +33,7 @@
                     </tr>
 
                     @else
-
+                        {{-- show no header if no events --}}
                     @endif
                     @forelse ($events as $event)
                     <tr class="table-body-row" style="margin-bottom: 20px;">
@@ -45,32 +45,35 @@
                         <td class="m-2 p-2">{{ $event->eventStartDate }}</td>
                         <td class="m-2 p-2">{{ $event->eventEndDate }}</td>
                         <td class="m-2 p-2"><strong>{{ $event->status }}</strong> </td>
-                        @if (Auth::user()->accType == 'user')
-                        <td class="border-0"><button type="" class="btn btn-info"><a class="btn"
-                                    href=""
-                                    style='color: black; text-decoration:none;' title='Check Event Detail'>CHECK</a>
+                        @if (Auth::user()->accType == 'user') {{-- user button --}}
+                        <td class="">
+                            <form action="{{ route('event.show', $event->id) }}" method="') }}">
+                                <button type="submit" class="btn btn-info text-black">
+                                    CHECK
                                 </button>
+                            </form>
                         </td>
 
-                        <td class="border-0">
-                            <button type="" class="btn btn-danger">
-                                <a class='btn'onClick="javascript: return confirm('Are you sure to deregister event ...');"
-                                        href=""
-                                        style='color: black; text-decoration:none;' title="DEREGISTER">
-                                        DEREGISTER
-                                </a>
-                            </button>
+                        <td class="">
+                            <form action="{{ route('event.deregister', $event->id) }}" method="POST" onclick="return confirm('Are you sure to deregister {{ $event->eventName }}?')">
+                                @csrf
+                                <input type="hidden" name="event_id" value="{{ $event->id }}">
+                                <button type="submit" class="btn btn-danger text-black" title="DEREGISTER">
+                                    DEREGISTER
+                                </button>
+                            </form>
                         </td>
-                        <td class="border-0">
-                            <button type="" class="btn btn-success">
-                                <a class='btn' href=""
-                                        style='color: black; text-decoration:none;' title="Manage Event Proof">
-                                        PROOF
-                                </a>
-                            </button>
+                        <td class="">
+                            <form action="">
+                                @csrf
+                                <input type="hidden" name="event_id" value="{{ $event->id }}">
+                                <button type="" class="btn btn-success" title="Manage Event Proof">
+                                    PROOF
+                                </button>
+                            </form>
                         </td>
-                        @else
-                        <td class="border-0">
+                        @else {{-- organizer button --}}
+                        <td class="">
                             <button type="" class="btn btn-info">
                                 <a class="btn" href=""
                                     style='color: black; text-decoration:none;'>
@@ -78,7 +81,7 @@
                                 </a>
                             </button>
                         </td>
-                        <td class="border-0">
+                        <td class="">
                             <button type="" class="btn btn-warning">
                                 <a class="btn" href=""
                                     style='color: black; text-decoration:none;'>
@@ -86,7 +89,7 @@
                                 </a>
                             </button>
                         </td>
-                        <td class="border-0">
+                        <td class="">
                             <button type="" class="btn btn-danger">
                                 <a class="btn" onClick="javascript: return confirm('Are you sure to end event {{ $event->eventName }}');"
                                     href=""

@@ -110,17 +110,7 @@ class EventsController extends Controller
         return redirect('/event')->with('success','Event Created!');
     }
 
-    public function storeTest0(Request $req)
-    {
-        $validatedData = $req->validate([
-            'name' => 'required|string',
-            'password' => 'required|string',
-            // 'age' => 'required|numeric|min:1',
-        ]);
-
-        return redirect()->route('test')->with(['success' => 'Success created!','data' => $validatedData]);
-    }
-
+    
     /**
      * Display the specified resource.
      *
@@ -190,5 +180,17 @@ class EventsController extends Controller
         }
 
         return redirect()->route('event.index')->with('error', 'Failed to register for the event.');
+    }
+
+    public function deregister(Request $request)
+    {
+        $event = Events::find($request->input('event_id'));
+        $user = Auth::user();
+        if ($event && $user && $event->users->contains($user->id)) {
+            DB::table('user_events')->where('event_id', $event->id)->where('user_id', $user->id)->delete();
+            return redirect()->route('myEvent')->with('success', 'You have successfully deregistered for the event!');
+        }
+
+        return redirect()->route('myEvent')->with('error', 'Failed to deregister for the event.');
     }
 }
