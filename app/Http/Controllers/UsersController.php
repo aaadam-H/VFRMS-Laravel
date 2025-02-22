@@ -79,7 +79,7 @@ class UsersController extends Controller
         $sort_by = $request->get('sort_by', 'id');
         $sort_order = $request->get('sort_order', 'asc');
         
-        $users = User::orderBy($sort_by, $sort_order)->paginate(50); // Adjust the number of items per page as needed
+        $users = User::orderBy($sort_by, $sort_order)->paginate(100); // Adjust the number of items per page as needed
         if(Auth::check())
         {
             Auth::user()->accType != 'superAdmin' ? abort(403): 'superAdmin only';
@@ -128,6 +128,7 @@ class UsersController extends Controller
         $user->password = Hash::make($pass);
         $user->contactNumber = $request->input('contactNum');
         $user->email = $request->input('email');
+        $user->updated_at = date('Y-m-d-H:i:s',time());
         $user->save();
         return redirect('/user')->with('success','Profile updated!');
 
@@ -161,7 +162,7 @@ class UsersController extends Controller
                 unlink($oldImagePath);
             }
         }
-
+        $user->updated_at = date('Y-m-d-H:i:s',time());
         $user->profilePic = $name;
         $user->save();
     }
@@ -194,6 +195,7 @@ class UsersController extends Controller
             unlink($oldImagePath);
         }
 
+        $user->updated_at = date('Y-m-d-H:i:s',time());
         $user->profilePic = 'noProfilePic.png';
         $user->save();
 

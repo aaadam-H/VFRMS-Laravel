@@ -17,7 +17,7 @@ class EventsFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => fake()->numberBetween(1, 10),
+            'user_id' => fake()->numberBetween(1, 50),
             'eventName' => fake()->sentence(2),
             'eventStartDate' => fake()->date(),
             'eventEndDate' => fake()->date(),

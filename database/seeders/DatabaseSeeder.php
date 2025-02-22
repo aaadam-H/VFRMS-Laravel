@@ -16,9 +16,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-
         User::factory()->superAdmin()->create(); //superAdmin account, email: sAdmin@gmail.com, password: superAdmin123
-        User::factory(10)->create();
-        Events::factory(10)->create();
+        User::factory(50)->create();
+        Events::factory(40)->create();
     }
 }
