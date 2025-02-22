@@ -2,8 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -27,6 +28,20 @@ class UserFactory extends Factory
             'contactNumber' => fake()->phoneNumber(),
             'profilePic' => 'noProfilePic.png',
         ];
+    }
+
+    public function superAdmin(){
+        return $this->state(function (array $attributes) {
+            return [
+                'name' => 'superAdmin',
+                'email' => 'sAdmin@gmail.com',
+                'email_verified_at' => date('Y-m-d_H:i:s',time()),
+                'password' => Hash::make('superAdmin123'),
+                'accType' => 'superAdmin',
+                'contactNumber' => '',
+                'profilePic' => 'noProfilePic.png',
+            ];
+        });
     }
 
 }
