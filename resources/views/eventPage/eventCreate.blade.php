@@ -9,9 +9,8 @@
             </div>
             <div class="col-md-8">
                 <div class="p-3 py-5">
-                    <form action="{{ route('event.store') }}" method="POST"> {{-- enctype="multipart/form-data"> --}}
+                    <form action="{{ route('event.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        {{-- {{ $errors }} --}}
                         <div class="row mt-3">
                             <div class="col-md-2"><label for="eventName">Event Name: </label></div>
                             <div class="col-md-10">
@@ -78,7 +77,6 @@
                         <div class="row mt-3">
                             <div class="col-md-2"><label for="desc">Event Description: </label></div>
                             <div class="col-md-10">
-                                {{-- {{ Form::textarea("Event Description", "", ["placeholder" => "Event Description", "class" => "form-control", "@error('desc') is-invalid @enderror", "name" => "desc"]) }} --}}
                                 <input type="textarea" name="desc" id="desc" class="form-control @error('desc') is-invalid @enderror" value="{{ old('desc') }}" placeholder="Event Description">
                                 @error('desc')
                                     <span class="invalid-feedback" role="alert">
@@ -155,14 +153,13 @@
                             </div>
                         </div>
 
-                        {{-- <div class="row mt-3 text-left">
+                        <div class="row mt-3 text-left">
                             <label for="uploadfile">Upload Picture for Event Icon <br></label>
-                            <input type="file" name="eventImg" value="" class="ml-2" />
-                        </div> --}}
+                            <input type="file" name="eventImg" class="ml-2" />
+                        </div>
 
                         <div class="mt-5 text-right"><button name='submit'
                                 class="btn btn-primary profile-button">Create</button></div>
-                        {{-- {!! Form::close() !!} --}}
                     </form>
                 </div>
             </div>

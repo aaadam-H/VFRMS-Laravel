@@ -47,10 +47,8 @@ class EventsController extends Controller
      */
     public function store(Request $request)
     {
-
         $validatedData = $request->validate([
             'eventName' => ['required','string'],
-            // 'email' => ['required','string','email'],
             'eventSDate' => ['required','date'],
             'eventEDate' => ['required','date'],
             'desc' => ['required','string'],
@@ -62,10 +60,9 @@ class EventsController extends Controller
             'accBankName' => ['required'],
             'accNumber' => ['required'],
             'earlyFeeQt' => ['required','numeric'],
-            // 'eventImg' => ['required','image'],
+            //'eventImg' => ['required','image'],
         ],[
             'eventName.required' => 'Event Name is required!',
-            'email.required' => 'Email is required!',
             'eventSDate.required' => 'Event Start Date is required!',
             'eventEDate.required' => 'Event End Date is required!',
             'eventRegSDate.required' => 'Event Register Start Date is required!',
@@ -76,41 +73,41 @@ class EventsController extends Controller
             'accBankName.required' => 'Bank Name is required!',
             'accNumber.required' => 'Bank Account Number is required!',
             'earlyFeeQt.required' => 'Early Fee Quota is required!',
+            //'eventImg.required' => 'Event Image is required!',
         ]);
 
-        // if($request->hasFile('eventImg')){
-        //     $fileNameWithExt = $request->file('eventImg')->getClientOriginalName();
-        //     $fileName = pathinfo($fileNameWithExt, PATHINFO_BASENAME);
-        //     $ext = $request->file('eventImg')->getClientOriginalExtension();
-        //     $fileNameToStore = $fileName.'-'.time().'.'.$ext;
-        //     $path = $request->file('eventImg')->storeAs('public/eventImg', $fileNameToStore);
-        // }else{
-        //     $fileNameToStore = 'noEventImg.png';
-        //     return 123;
-        // }
+        if($request->hasFile('eventImg')){
+            $fileNameWithExt = $request->file('eventImg')->getClientOriginalName();
+            $fileName = pathinfo($fileNameWithExt, PATHINFO_FILENAME);
+            $ext = $request->file('eventImg')->getClientOriginalExtension();
+            $fileNameToStore = $fileName.'_'.$validatedData['eventName'].'_'.time().'.'.$ext;
+            $path = $request->file('eventImg')->storeAs('public/eventImg', $fileNameToStore);
+        } else {
+            $fileNameToStore = 'noEventImg.png';
+        }
 
         $event = new Events;
         $event->user_id = Auth::user()->id;
         $event->eventName = $validatedData['eventName'];
-        $event->eventStartDate = $request->input('eventSDate');
-        $event->eventEndDate = $request->input('eventEDate');
-        $event->eventDesc = $request->input('desc');
+        $event->eventStartDate = $validatedData['eventSDate'];
+        $event->eventEndDate = $validatedData['eventEDate'];
+        $event->eventDesc = $validatedData['desc'];
         $event->status = 'ongoing';
-        $event->regStartDate = $request->input('eventRegSDate');
-        $event->regEndDate = $request->input('eventRegEDate');
-        $event->fee = $request->input('fee');
-        $event->earlyFee = $request->input('earlyFee');
-        $event->contactNumEvent = $request->input('contactNumEvent');
-        $event->bankName = $request->input('accBankName');
-        $event->accNumber = $request->input('accNumber');
-        $event->earlyFeeQt = $request->input('earlyFeeQt');
-        // $event->eventImg = $fileNameToStore;
+        $event->regStartDate = $validatedData['eventRegSDate'];
+        $event->regEndDate = $validatedData['eventRegEDate'];
+        $event->fee = $validatedData['fee'];
+        $event->earlyFee = $validatedData['earlyFee'];
+        $event->contactNumEvent = $validatedData['contactNumEvent'];
+        $event->bankName = $validatedData['accBankName'];
+        $event->accNumber = $validatedData['accNumber'];
+        $event->earlyFeeQt = $validatedData['earlyFeeQt'];
+        $event->eventImg = $fileNameToStore;
         $event->save();
 
         return redirect('/event')->with('success','Event Created!');
     }
 
-    
+
     /**
      * Display the specified resource.
      *
@@ -164,6 +161,10 @@ class EventsController extends Controller
     {
         $event = Events::find($request->input('eventID'));
         $user = Auth::user();
+        //check if event is closed
+        if($event->status != 'ongoing'){
+            return redirect()->route('event.index')->with('error', 'Event is closed!');
+        }
         //check if user already registered
         if($event->users->contains($user->id)){
             return redirect()->route('event.index')->with('error', 'You have already registered for the event!');

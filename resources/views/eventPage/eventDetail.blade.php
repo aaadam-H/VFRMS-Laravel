@@ -49,7 +49,7 @@
                     </div>
                     <div class="row mt-2">
                         <div class="col-md-4"><strong>Fee: </strong></div>
-                        <div class="col-md-8">RM{{ $event->fee }}</div>
+                        <div class="col-md-8">RM{{ number_format($event->fee, 2) }}</div>
                     </div>
 
                     <div class="row mt-3">
