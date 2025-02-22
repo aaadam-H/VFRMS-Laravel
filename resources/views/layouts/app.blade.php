@@ -16,7 +16,7 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -74,6 +74,13 @@
                                     <a class="dropdown-item" href="{{ route('myEvent') }}">
                                         {{ __('My Event') }}
                                     </a>
+                                    @if (Auth::user()->accType == 'superAdmin')
+                                        <a class="dropdown-item" href="{{ route('superAdmin.showAllUser') }}">
+                                        {{ __('All User') }}
+                                    </a>
+
+                                    @endif
+
 
                                     {{-- <a class="dropdown-item" href="{{ route('user.index') }}">
                                         {{ __('Statistic') }}
