@@ -52,11 +52,11 @@ class User extends Authenticatable
     }
 
     public function event(){
-        return $this->hasMany(Events::class);
+        return $this->hasMany(Event::class);
     }
 
     public function events(){
-        return $this->belongsToMany(Events::class, 'user_events', 'user_id', 'event_id');
+        return $this->belongsToMany(Event::class, 'user_events', 'user_id', 'event_id');
     }
 
 }
