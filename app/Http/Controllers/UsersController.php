@@ -78,8 +78,8 @@ class UsersController extends Controller
         };
         $sort_by = $request->get('sort_by', 'id');
         $sort_order = $request->get('sort_order', 'asc');
-        
-        $users = User::orderBy($sort_by, $sort_order)->paginate(100); // Adjust the number of items per page as needed
+
+        $users = User::orderBy($sort_by, $sort_order)->paginate(20); // Adjust the number of items per page as needed
         if(Auth::check())
         {
             Auth::user()->accType != 'superAdmin' ? abort(403): 'superAdmin only';
