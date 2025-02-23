@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Events;
+use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -20,8 +20,8 @@ class EventsController extends Controller
     {
 
         //ongoing events
-        $events = Events::where('status', 'ongoing')->get();
-        $eventsOff = Events::where('status', 'closed')->get();
+        $events = Event::where('status', 'ongoing')->get();
+        $eventsOff = Event::where('status', 'closed')->get();
         // dd($eventsOff);
         return view('index', compact('events', 'eventsOff'));
 
@@ -72,7 +72,7 @@ class EventsController extends Controller
             $fileNameToStore = 'noEventImg.png';
         }
 
-        $event = new Events;
+        $event = new Event;
         $event->user_id = Auth::user()->id;
         $event->eventName = $validatedData['eventName'];
         $event->eventStartDate = $validatedData['eventSDate'];
@@ -94,7 +94,7 @@ class EventsController extends Controller
     }
     public function show($id)
     {
-        $event = Events::find($id);
+        $event = Event::find($id);
         return view('eventPage.eventDetail', compact('event'));
     }
 
@@ -112,7 +112,7 @@ class EventsController extends Controller
 
     public function closeEvent(Request $request)
     {
-        $event = Events::find($request->input('event_id'));
+        $event = Event::find($request->input('event_id'));
         //check if event is closed
         if($event->status != 'ongoing'){
             return redirect('/myEvent')->with('error', 'Event is already closed!');
@@ -125,7 +125,7 @@ class EventsController extends Controller
     public function myEvent(){
         $user = Auth::user();
         if($user->accType == 'organizer'){
-            $events = Events::where('user_id', $user->id)->get();
+            $events = Event::where('user_id', $user->id)->get();
         } else {
             $events = DB::table('user_events')
                         ->join('events', 'user_events.event_id', '=', 'events.id')
@@ -138,7 +138,7 @@ class EventsController extends Controller
 
     public function register(Request $request)
     {
-        $event = Events::find($request->input('eventID'));
+        $event = Event::find($request->input('eventID'));
         $user = Auth::user();
         //check if event is closed
         if($event->status != 'ongoing'){
@@ -164,7 +164,7 @@ class EventsController extends Controller
 
     public function deregister(Request $request)
     {
-        $event = Events::find($request->input('event_id'));
+        $event = Event::find($request->input('event_id'));
         $user = Auth::user();
         if ($event && $user && $event->users->contains($user->id)) {
             DB::table('user_events')->where('event_id', $event->id)->where('user_id', $user->id)->delete();
