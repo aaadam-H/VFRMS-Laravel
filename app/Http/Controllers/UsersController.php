@@ -69,22 +69,14 @@ class UsersController extends Controller
 
     public function showAllUser(Request $request)
     {
-        if (!Auth::check()) {
-            return redirect()->route('event.index')->with('error','You are not logged in! Log in first!');
+        if (!Auth::check() || Auth::user()->accType != 'superAdmin') {
+            abort(403);
         }
-        else
-        {
-            Auth::user()->accType == 'superAdmin' ? '' : abort(404);
-        };
         $sort_by = $request->get('sort_by', 'id');
         $sort_order = $request->get('sort_order', 'asc');
 
-        $users = User::orderBy($sort_by, $sort_order)->paginate(20); // Adjust the number of items per page as needed
-        if(Auth::check())
-        {
-            Auth::user()->accType != 'superAdmin' ? abort(403): 'superAdmin only';
-        }
-        return view('superAdmin.show', compact('users', 'sort_by', 'sort_order'));
+        $users = User::orderBy($sort_by, $sort_order)->paginate(20);
+        return view('superadmin.show', compact('users', 'sort_by', 'sort_order'));
     }
 
     /**
@@ -115,27 +107,29 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'username' => 'required',
-            'password' => 'required',
-            'contactNum' => 'required',
-            'email' => 'required',
+            'username' => 'required|string|max:255',
+            'password' => 'required|string|min:8',
+            'contactNum' => 'required|string',
+            'email' => 'required|email',
         ]);
-
-        $pass = $request->input('password');
 
         $user = User::find($id);
         $user->name = $request->input('username');
-        $user->password = Hash::make($pass);
+        $user->password = Hash::make($request->input('password'));
         $user->contactNumber = $request->input('contactNum');
         $user->email = $request->input('email');
-        $user->updated_at = date('Y-m-d-H:i:s',time());
         $user->save();
         return redirect('/user')->with('success','Profile updated!');
-
     }
 
     public function updateImg(Request $request, $id)
     {
+        $user = User::find($id);
+        
+        if ($id != Auth::user()->id) {
+            return redirect()->route('user.index', $id)->with('error', 'Access denied!');
+        }
+
         $this->validate($request,
         [
         'uploadfile' => 'required|image|mimes:jpeg,png,jpg,gif',
@@ -146,28 +140,24 @@ class UsersController extends Controller
         'uploadfile.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif',
         ]);
 
+        if ($request->hasFile('uploadfile')) {
+            $image = $request->file('uploadfile');
+            $name = date('Y-m-d-H-i',time()).'_'.$user->id.'.'.$image->getClientOriginalExtension();
+            $destinationPath = public_path('/storage/userProfilePic');
+            $image->move($destinationPath, $name);
 
-    $user = User::find($id);
-
-    if ($request->hasFile('uploadfile')) {
-        $image = $request->file('uploadfile');
-        $name = date('Y-m-d-H-i',time()).'_'.$user->id.'.'.$image->getClientOriginalExtension();
-        $destinationPath = public_path('/storage/userProfilePic');
-        $image->move($destinationPath, $name);
-
-        // Delete the old profile picture if it exists and is not the default one
-        if ($user->profilePic && $user->profilePic != 'noProfilePic.png') {
-            $oldImagePath = public_path('/storage/userProfilePic/'.$user->profilePic);
-            if (file_exists($oldImagePath)) {
-                unlink($oldImagePath);
+            // Delete the old profile picture if it exists and is not the default one
+            if ($user->profilePic && $user->profilePic != 'noProfilePic.png') {
+                $oldImagePath = public_path('/storage/userProfilePic/'.$user->profilePic);
+                if (file_exists($oldImagePath)) {
+                    @unlink($oldImagePath);
+                }
             }
+            $user->profilePic = $name;
+            $user->save();
         }
-        $user->updated_at = date('Y-m-d-H:i:s',time());
-        $user->profilePic = $name;
-        $user->save();
-    }
 
-    return redirect()->route('user.index', $id)->with('success', 'Profile picture updated successfully!');
+        return redirect()->route('user.index', $id)->with('success', 'Profile picture updated successfully!');
     }
 
 
@@ -192,10 +182,9 @@ class UsersController extends Controller
 
         $oldImagePath = public_path('/storage/userProfilePic/' . $user->profilePic);
         if (file_exists($oldImagePath)) {
-            unlink($oldImagePath);
+            @unlink($oldImagePath);
         }
 
-        $user->updated_at = date('Y-m-d-H:i:s',time());
         $user->profilePic = 'noProfilePic.png';
         $user->save();
 

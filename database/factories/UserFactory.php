@@ -21,7 +21,6 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->safeEmail(),
-            'email_verified_at' => now(),
             'password' => Hash::make('1234'), // password
             'remember_token' => Str::random(10),
             'accType' => fake()->randomElement(['user', 'organizer']),
@@ -35,7 +34,6 @@ class UserFactory extends Factory
             return [
                 'name' => 'superAdmin',
                 'email' => 'sAdmin@gmail.com',
-                'email_verified_at' => date('Y-m-d-H:i:s',time()),
                 'password' => Hash::make('superAdmin123'),
                 'accType' => 'superAdmin',
                 'contactNumber' => '',

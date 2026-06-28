@@ -33,10 +33,6 @@ Route::get('/home', function () {
 Route::get('/', function () {
     return redirect('/event');
 });
-//superAdminTest
-route::middleware('auth')->group(function () {
-});
-Route::get('/allUser', [UsersController::class, 'showAllUser'])->name('superAdmin.showAllUser');   
 
 //event
 Route::resource('/event', EventsController::class)->only('index');
@@ -48,7 +44,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/myEvent', [EventsController::class, 'closeEvent'])->name('event.close');
 });
 
-
 //user
 Route::middleware('auth')->group(function () {
     Route::resource('user', UsersController::class)->only('index', 'show', 'update', 'edit');
@@ -58,14 +53,13 @@ Route::prefix('user')->middleware('auth')->group( function(){
     Route::post('/{id}/destroyImg', [UsersController::class, 'destroyImg'])->name('user.destroyImg');
 });
 
+//superAdmin
+Route::middleware('auth')->group(function () {
+    Route::get('/allUser', [UsersController::class, 'showAllUser'])->name('superAdmin.showAllUser');
+});
 
 //test
 Route::get('/test', function () {
-    // $user = Auth::user()->name;
-    // $user = Auth()->user() ?? 'test';
-    // $event = Events::find(1);
-    // return "event name ".$event->eventName." own by ". $event->user->name." acctype: ". $event->user->accType;
-    //dd($user);
     return view('test');
 })->name('test');
 

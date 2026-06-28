@@ -12,6 +12,7 @@ class Event extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
+        'user_id',
         'eventName',
         'eventStartDate',
         'eventEndDate',
@@ -25,6 +26,7 @@ class Event extends Model
         'bankName',
         'accNumber',
         'earlyFeeQt',
+        'eventImg',
     ];
 
     public function user(){

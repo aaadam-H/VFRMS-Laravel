@@ -5,10 +5,7 @@
                 <div class="row">
                     <div class="col-md-4 border-right">
                         <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
-                            {{-- src="/storage/userProfilePic/{{ $profilePic }}" --}}
-                            src=
-                            @if($profilePic == 'noProfilePic.png'){{ 'storage/webAsset/noProfilePic.png' }}@else{{ "storage/userProfilePic/".$profilePic }}
-                            @endif
+                            src="{{ asset($profilePic == 'noProfilePic.png' ? 'storage/webAsset/noProfilePic.png' : 'storage/userProfilePic/' . $profilePic) }}"
                             width="90"><span class="font-weight-bold">{{ $name }}</span><span class="text-black-50">{{ $email }}</span><span>{{ $accType }}</span></div>
                     </div>
                     <div class="col-md-8">

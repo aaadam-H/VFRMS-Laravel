@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-lg-6" style="float: none; margin:auto;">
                     <div class="d-flex flex-column align-items-center text-center p-3 py-3">
-                        <img class="rounded mt-5" src="/storage/eventImg/{{ $event->eventImg }}" width="320">
+                        <img class="rounded mt-5" src="{{ asset('storage/eventImg/' . $event->eventImg) }}" width="320">
                     </div>
                     <div class="row mt-2">
                         <div class="col-md-4"><strong>Event Name: </strong></div>

@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Mockery\Generator\StringManipulation\Pass\Pass;
 
 class EventsController extends Controller
 {
@@ -127,11 +126,7 @@ class EventsController extends Controller
         if($user->accType == 'organizer'){
             $events = Event::where('user_id', $user->id)->get();
         } else {
-            $events = DB::table('user_events')
-                        ->join('events', 'user_events.event_id', '=', 'events.id')
-                        ->where('user_events.user_id', $user->id)
-                        ->select('events.*')
-                        ->get();
+            $events = $user->events()->get();
         }
         return view('profile.myEvent', compact('events'));
     }
@@ -150,13 +145,17 @@ class EventsController extends Controller
         }
 
         if ($event && $user) {
-            DB::table('user_events')->insert([
-                'event_id' => $event->id,
-                'user_id' => $user->id,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-            return redirect()->route('event.index')->with('success', 'You have successfully registered for the event!');
+            try {
+                DB::table('user_events')->insert([
+                    'event_id' => $event->id,
+                    'user_id' => $user->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+                return redirect()->route('event.index')->with('success', 'You have successfully registered for the event!');
+            } catch (\Exception $e) {
+                return redirect()->route('event.index')->with('error', 'Failed to register for the event.');
+            }
         }
 
         return redirect()->route('event.index')->with('error', 'Failed to register for the event.');
